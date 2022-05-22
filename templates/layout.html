@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="lt-ie9"><![endif]-->
+<!--[if gt IE 8]><!--><html><!--<![endif]-->
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    <meta name="description" content="{% block meta_description %}{% endblock %}">
+    <meta property="og:title" content="{% block og_title %}{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}{% endblock %}">
+    <meta property="og:site_name" content="{% block og_sitename %}{% endblock %}">
+    <meta property="og:image" content="{% block og_image %}{% endblock %}">
+    <link rel="shortcut icon" href="{{ get_env(name='DOMAIN') }}/static/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="{{ get_env(name='DOMAIN') }}/static/css/app.css">
+    <!--[if lte IE 8]>
+    (function(i,e){for(;i<10;i++)document.createElement(e[i]);})(0,['section','article','aside','header','footer','nav','figure','figcaption','time','mark']);
+    <![endif]-->
+</head>
+<body>
+    <header>
+        <nav>
+            {% block header %}
+            <ul>
+                {% if is_logged_in %}
+                    <li><a href="/">Main</a></li>
+                    <li><a href="/dashboard/">Dashboard</a></li>
+                    <li><a href="/send/">Send STH</a></li>
+                {% else %}
+                    <li><a href="/">Main</a></li>
+                    <li><a href="/node">Node</a></li>
+                    <li><a href="/csv">CSV</a></li>
+                    <li><a href="/help">Helpdesk</a></li>
+                {% endif %}
+                {% if is_logged_in %}
+                    
+                {% else %}
+                    <li><a href="/accounts/login/">Login</a></li>
+                    <li><a href="/accounts/register/">Register</a></li>
+                {% endif %}
+            </ul>
+            {% if is_logged_in %}
+            <li>
+                <form method="post" action="/accounts/logout/">
+                    <button type="submit">Logout</button>
+                </form>
+            </li>
+            {% endif %}
+            {% endblock %}
+        </nav>
+    </header>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+    <footer>
+        <div class="footer-container">
+            <div>
+                <a href="https://github.com/cryptoishere"><img src="{{ get_env(name='DOMAIN') }}/static/images/git.svg" alt="Github"></a>
+                <a href="https://instagram.com/cryptoishere"><img src="{{ get_env(name='DOMAIN') }}/static/images/instagram.svg" alt="Instagram"></a>
+                <a href="https://twitter.com/cryptoishere"><img src="{{ get_env(name='DOMAIN') }}/static/images/twitter.svg" alt="Twitter"></a>
+            </div>
+            <div class="status-indicator">Smartholdem Node status:</div>
+        </div>
+    </footer>
+    <script src="{{ get_env(name='DOMAIN') }}/static/js/scripts.js"></script>
+</body>
+</html>

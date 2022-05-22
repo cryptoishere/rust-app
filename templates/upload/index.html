@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+
+{% block title %}Upload{% endblock %}
+
+{% block content %}
+<h1>Upload</h1>
+
+<form action="/upload/" method="POST" enctype="multipart/form-data">
+    {% if error %}
+    <ul>
+        <li>&#9432;&nbsp; {{ error }}</li>
+    </ul>
+    {% endif %}
+
+    <!-- <p>
+        <label for="email">Email:</label>
+        <input name="email" type="email" value="">
+    </p> -->
+    
+    <p>
+        <label for="file">File</label>
+        <input name="file" type="file">
+    </p>
+
+    <button type="submit">Send</button>
+</form>
+{% endblock %}

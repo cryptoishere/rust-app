@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+    <div class="wrapper">
+        <h1>Dashboard</h1>
+        <p>Welcome back, {{ user.name }}.</p>
+        <div>Logged in: {{ is_logged_in }}</div>
+        <div>String created with macro format! ::> {{ user_instance }}</div>
+    </div>
+{% endblock %}
