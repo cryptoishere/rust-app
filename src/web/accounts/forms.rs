@@ -1,4 +1,4 @@
-use serde::{Deserialize, Serialize};
+use app::serde::{Deserialize, Serialize};
 use app::forms::{EmailField, PasswordField, TextField, Validation};
 
 fn default_redirect_path() -> String { "/".into() }

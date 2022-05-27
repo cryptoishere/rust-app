@@ -61,7 +61,7 @@ pub fn load() -> TemplateStore {
         let (tx, rx) = channel();
         let mut watcher = watcher(tx, Duration::from_secs(1)).expect("Template watcher creation failed!");
 
-        let path = templates_glob.replace("**/*", "");
+        let path = templates_glob.replace("**\\*", "");
         let watcher_err_msg = format!("Can't watch for changes in folder `{}`. Does it exist, and do you have correct permissions?", path);
         watcher.watch(path, RecursiveMode::Recursive).expect(&watcher_err_msg);
 

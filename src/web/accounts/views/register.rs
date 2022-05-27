@@ -12,7 +12,7 @@ pub async fn form(request: HttpRequest) -> Result<HttpResponse> {
         return request.redirect("/dashboard/");
     }
 
-    request.render(200, "accounts/register.html", {
+    request.render(200, "accounts\\register.html", {
         let mut ctx = Context::new();
         ctx.insert("form", &NewAccountForm::default());
         ctx
@@ -29,7 +29,7 @@ pub async fn create_account(
 
     let mut form = form.into_inner();
     if !form.is_valid() {
-        return request.render(400, "accounts/register.html", {
+        return request.render(400, "accounts\\register.html", {
             let mut ctx = Context::new();
             ctx.insert("form", &form);
             ctx
