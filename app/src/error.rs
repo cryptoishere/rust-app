@@ -2,7 +2,7 @@
 //! returning responses. This module handles converting several differing 
 //! error formats into the one we use for responding.
 
-use std::{error, fmt};
+use std::{error, fmt, io};
 use actix_web::{HttpResponse, ResponseError};
 
 /// This enum represents the largest classes of errors we can expect to
@@ -18,6 +18,7 @@ pub enum Error {
     Template(tera::Error),
     Json(serde_json::error::Error),
     Radix(radix::RadixErr),
+    FS(io::Error),
     InvalidPassword,
     InvalidAccountToken,
     PasswordHasher(djangohashers::HasherError)
@@ -38,6 +39,7 @@ impl error::Error for Error {
             Error::Template(e) => Some(e),
             Error::Json(e) => Some(e),
             Error::Radix(e) => Some(e),
+            Error::FS(e) => Some(e),
             
             Error::Generic(_) | Error::InvalidPassword |
             Error::InvalidAccountToken |
@@ -79,6 +81,12 @@ impl From<tera::Error> for Error {
 impl From<radix::RadixErr> for Error {
     fn from(e: radix::RadixErr) -> Self {
         Error::Radix(e)
+    }
+}
+
+impl From<io::Error> for Error {
+    fn from(e: io::Error) -> Self {
+        Error::FS(e)
     }
 }
 

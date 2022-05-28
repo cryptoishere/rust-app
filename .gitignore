@@ -19,3 +19,5 @@ certs/*
 migrations/
 
 front-livedev/
+
+some-file/

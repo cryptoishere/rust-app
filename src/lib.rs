@@ -22,7 +22,7 @@ pub async fn main() -> io::Result<()> {
         .register_jobs(web::accounts::jobs::configure)
         .register_service(web::dashboard::configure)
         // .register_service(web::send::configure)
-        // .register_service(web::upload::configure)
+        .register_service(web::upload::configure)
         .run()
         .await?
         .await
