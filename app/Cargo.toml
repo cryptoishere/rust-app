@@ -41,6 +41,7 @@ tera = "1.5"
 validator = { version = "0.12", features = ["derive"] }
 zxcvbn = "2.0.1"
 lettre = { version="0.10.0-rc.4", optional = true }
+csv = "1"
 
 [features]
 default = []

@@ -1,3 +1,5 @@
+extern crate csv;
+
 use std::sync::Arc;
 use std::env;
 

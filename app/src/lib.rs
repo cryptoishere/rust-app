@@ -19,6 +19,7 @@ pub use serde;
 pub use serde_json;
 pub use sqlx;
 pub use tera;
+pub use csv;
 
 #[macro_use] pub extern crate log;
 

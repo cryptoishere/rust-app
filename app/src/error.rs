@@ -4,6 +4,7 @@
 
 use std::{error, fmt, io};
 use actix_web::{HttpResponse, ResponseError};
+use csv;
 
 /// This enum represents the largest classes of errors we can expect to
 /// encounter in the lifespan of our application. Feel free to add to this
@@ -19,6 +20,7 @@ pub enum Error {
     Json(serde_json::error::Error),
     Radix(radix::RadixErr),
     FS(io::Error),
+    CSV(csv::Error),
     InvalidPassword,
     InvalidAccountToken,
     PasswordHasher(djangohashers::HasherError)
@@ -40,6 +42,7 @@ impl error::Error for Error {
             Error::Json(e) => Some(e),
             Error::Radix(e) => Some(e),
             Error::FS(e) => Some(e),
+            Error::CSV(e) => Some(e),
             
             Error::Generic(_) | Error::InvalidPassword |
             Error::InvalidAccountToken |
@@ -87,6 +90,12 @@ impl From<radix::RadixErr> for Error {
 impl From<io::Error> for Error {
     fn from(e: io::Error) -> Self {
         Error::FS(e)
+    }
+}
+
+impl From<csv::Error> for Error {
+    fn from(e: csv::Error) -> Self {
+        Error::CSV(e)
     }
 }
 
