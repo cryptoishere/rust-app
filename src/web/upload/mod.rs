@@ -13,6 +13,7 @@ pub fn configure(config: &mut ServiceConfig) {
     config.service(scope("/upload/").wrap(guard)
         //upload
         .service(resource("").to(views::upload))
+        // .service(resource("/csv/").route(web::post().to(views::csv)))
         // /upload/extractors
         .service(resource("/ext").to(views::main))
         .service(resource("/json/").route(web::post().to(views::post_json)))

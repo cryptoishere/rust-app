@@ -20,6 +20,7 @@ pub use serde_json;
 pub use sqlx;
 pub use tera;
 pub use csv;
+pub use actix_extract_multipart;
 
 #[macro_use] pub extern crate log;
 

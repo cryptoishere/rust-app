@@ -7,7 +7,7 @@ use std::{io};
 // use app::error::Error;
 use std::path::PathBuf;
 use std::borrow::Cow;
-use std::fs::File;
+// use std::fs::File;
 use std::collections::HashMap;
 
 use crate::web::accounts::jobs::{SendWelcomeAccountEmail};
@@ -15,6 +15,16 @@ use crate::web::accounts::jobs::{SendWelcomeAccountEmail};
 use log::{debug, error, log_enabled, info, Level};
 
 use serde::{Deserialize, Serialize};
+
+use app::actix_extract_multipart::*;
+// Accepted files extensions
+const FILES_EXTENSIONS: [&str; 1] = [/*"image/png", "image/jpeg",*/ "text/csv"];
+
+pub struct CSVForm {
+    pub string_param: String,
+    pub number_u_param: u32,
+    pub file_param: Option<File>,
+}
 
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "PascalCase")]
@@ -40,8 +50,61 @@ struct WriteRecord<'a> {
     longitude: f64,
 }
 
-/// Returns an overview of everything in the system.
 pub async fn upload(request: HttpRequest) -> Result<HttpResponse> {
+    // let user = request.user()?;
+
+    // request.render(200, "upload/index.html", {
+    //     let mut context = Context::new();
+
+    //     context
+    // })
+
+    Ok(HttpResponse::Ok().body(include_str!("..\\..\\..\\..\\templates\\upload\\upload.html")))
+}
+
+pub async fn csv(payload: Multipart<CSVForm>) -> HttpResponse {
+    println!("Value of string_param: {}", &payload.string_param);
+    println!("Value of number_u_param: {}", &payload.number_u_param);
+    println!(
+        "File: {}",
+        if payload.file_param.is_some() {
+            "YES"
+        } else {
+            "NO"
+        }
+    );
+
+    if let Some(file) = &payload.file_param {
+        // We getting a file, we can, for example, check file type, saving this file or do some other stuff
+        if !FILES_EXTENSIONS.contains(&file.file_type().as_str()) {
+            eprintln!("Wrong file format");
+            return HttpResponse::BadRequest()
+                .json(format!("File's extension must be: {:?}", FILES_EXTENSIONS));
+        }
+
+        if saving_file_function(file).is_err() {
+            return HttpResponse::InternalServerError().json("");
+        };
+    }
+
+    HttpResponse::Ok().json("Done")
+}
+
+fn saving_file_function(file: &File) -> std::result::Result<(), ()> {
+    // Do some stuff here
+    println!(
+        "Saving file \"{}\" ({} bytes) successfully. Additional data: FileType: {}",
+        file.name(),
+        file.len(),
+        file.file_type(),
+    );
+
+    println!("data: {:?}", file.data());
+
+    Ok(())
+}
+
+pub async fn upload_test(request: HttpRequest) -> Result<HttpResponse> {
     // let user = request.user()?;
 
     // let path = "/tmp/foo/bar/baz";
