@@ -43,24 +43,24 @@ Templates are written in Tera. If you've written templates in Django or Jinja2, 
 
 The provided templates has a top-level layout.html, which should be your global public layout. The templates/dashboard folder is what a user sees upon logging in.
 
-In development, your templates are automatically reloaded on edit. Jelly also provides a stock "an error happened" view, similar to what Django does.
+In development, your templates are automatically reloaded on edit. App also provides a stock "an error happened" view, similar to what Django does.
 
 In production, both of these are disabled.
 
-Your template may use any of the environment variable starting with JELLY_.
+Your template may use any of the environment variable starting with APP_.
 
 Static
 The static folder is where you can place any static things. In development, actix-files is preconfigured to serve content from that directory, in order to make life easier for just running on your machine. This is disabled in the production build, mostly because we tend to shove this behind Nginx. You can swap this as needed.
 
 Forms
-Writing the same email/password/etc verification logic is a chore, and one of the nicer things Django has is Form helpers for this type of thing. If you miss that, Jelly has a forms-ish module that you can use.
+Writing the same email/password/etc verification logic is a chore, and one of the nicer things Django has is Form helpers for this type of thing. If you miss that, App has a forms-ish module that you can use.
 
 For instance, you could do:
 
 forms.rs
 
 use serde::{Deserialize, Serialize};
-use jelly::forms::{EmailField, PasswordField, Validation};
+use app::forms::{EmailField, PasswordField, Validation};
 
 #[derive(Default, Debug, Deserialize, Serialize)]
 pub struct LoginForm {
@@ -95,12 +95,12 @@ pub async fn authenticate(
     }
 In this case, EmailField will check that the email is a mostly-valid email address. PasswordField will check that it's a "secure" password. Each Field type has an internal errors stack, so you can pass it back to your view and render errors as necessary.
 
-For more supported field types, see the jelly/forms module.
+For more supported field types, see the app/forms module.
 
 Request Helpers
-A personal pet peeve: the default actix-web view definitions are mind-numbingly verbose. Code is read far more than it's written, and thus Jelly includes some choices to make writing views less of a headache: namely, access to things like database pools and authentication are implemented as traits on HttpRequest.
+A personal pet peeve: the default actix-web view definitions are mind-numbingly verbose. Code is read far more than it's written, and thus App includes some choices to make writing views less of a headache: namely, access to things like database pools and authentication are implemented as traits on HttpRequest.
 
-This makes the necessary view imports a bit cleaner, requiring just the prelude for some traits, and makes view definitons much cleaner overall. It's important to note that if, for whatever reason, you need to use standard actix-web view definitions, you totally can - Jelly doesn't restrict this, just provides a (we think) nicer alternative.
+This makes the necessary view imports a bit cleaner, requiring just the prelude for some traits, and makes view definitons much cleaner overall. It's important to note that if, for whatever reason, you need to use standard actix-web view definitions, you totally can - App doesn't restrict this, just provides a (we think) nicer alternative.
 
 Checking a User
 You can call request.is_authenticated()? to check if a User is authenticated. This does not incur a database hit, but simply checks against the signed cookie session value.
@@ -109,7 +109,7 @@ You can call request.user()? to get the User for a request. This does not incur 
 
 If you want the full user Account object, you can call Account::get(user.id, &db_pool).await?, or write your own method.
 
-You can restrict access to only authenticated users on a URL basis by using jelly::guards::Auth; example usage can be found in src/dashboard/mod.rs.
+You can restrict access to only authenticated users on a URL basis by using app::guards::Auth; example usage can be found in src/dashboard/mod.rs.
 
 Rendering a Template
 You can call request.render(http_code, template_path, model), where:
@@ -143,9 +143,9 @@ You can call request.queue(MyJob {...})? to dispatch a job in the background.
 Email
 Email may be sent with the help of different drivers:
 
-postmark (enabled with feature jelly/email-postmark),
-sendgrid (enabled with feature jelly/email-sendgrid),
-smtp (enabled with feature jelly/email-smtp).
+postmark (enabled with feature app/email-postmark),
+sendgrid (enabled with feature app/email-sendgrid),
+smtp (enabled with feature app/email-smtp).
 You can enable several or all features, in which case all selected drivers will be tried until one success or all fails.
 
 The End
