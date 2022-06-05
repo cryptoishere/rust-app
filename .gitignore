@@ -16,8 +16,8 @@ Cargo.lock
 
 certs/*
 
-migrations/
+# migrations/
 
 front-livedev/
 
-some-file/
+# some-file/
